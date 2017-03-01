@@ -206,3 +206,19 @@ Function.prototype.inherits2 = function(parent, child) {
   child.prototype = new Surrogate();
   child.prototype.constructor = child;
 }
+
+Array.prototype.mergeSort = function(cb) {
+  if (this.length <= 1) {
+    return this;
+  }
+
+  if (typeof cb !== "function") {
+    cb = function(x, y) {
+      
+    }
+  }
+}
+
+function merge(left, right, cb) {
+
+}
