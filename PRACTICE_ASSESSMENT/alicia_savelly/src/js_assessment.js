@@ -212,13 +212,58 @@ Array.prototype.mergeSort = function(cb) {
     return this;
   }
 
-  if (typeof cb !== "function") {
+  if (typeof cb !== Function) {
     cb = function(x, y) {
-      
+      if (x < y) {
+        return -1;
+      } else if(x === y) {
+        return 0;
+      } else if (x > y) {
+        return 1;
+      }
     }
   }
+
+  let middle = Math.floor(this.length / 2);
+  let left = this.slice(0, middle).mergeSort(cb);
+  let right = this.slice(middle).mergeSort(cb);
+
+  return merge(left, right, cb);
 }
 
 function merge(left, right, cb) {
+  merged = [];
 
+  while (left.length >= 1 && right.length >= 1) {
+    if (cb(left[0], right[0]) === -1) {
+      merged.push(left.shift());
+    } else if (cb(left[0], right[0]) === 0){
+      merged.push(left.shift());
+    } else if (cb(left[0], right[0]) === 1){
+      merged.push(right.shift());
+    }
+  }
+
+  merged = merged.concat(left);
+  merged = merged.concat(right);
+  return merged;
 }
+
+console.log([3, 2, 1, 5, 6, 3, 2, 1, 8].mergeSort());
+//sorting algorithms
+
+//enumerable functions. not necessary to know all of them but
+//practice with some of them
+//hard ones, zip, flatten, transpose
+
+//curry
+//curried sum form as well
+
+//inherits
+
+//myBind
+
+//probably won't do recursive subsets
+//substrings recursive fair game, some of the easier ones fair game
+//do recursive questions come from just javascript? no, it comes
+//from ruby curriculum too
