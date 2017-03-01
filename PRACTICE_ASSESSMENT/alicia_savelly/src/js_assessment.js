@@ -2,10 +2,11 @@
 // (optional) end index.
 
 String.prototype.mySlice = function(startIdx, endIdx = this.length) {
+  let result = "";
+
   if (endIdx > this.length) {
     endIdx = this.length;
   }
-  let result = "";
 
   for(let i = startIdx; i < endIdx; i++) {
     result += this[i];
@@ -21,9 +22,13 @@ console.log("alicia".mySlice(1, 4)); // "lic"
 Array.prototype.myReduce = function(cb) {
   let accumulator = this[0];
 
-  for(let i = 1; i < this.length; i++) {
-    accumulator = cb(accumulator, this[i]);
-  }
+  // for(let i = 1; i < this.length; i++) {
+  //   accumulator = cb(accumulator, this[i]);
+  // }
+  //OR
+  this.slice(1).forEach( (el) => {
+    accumulator = cb(accumulator, el);
+  });
 
   return accumulator;
 };
@@ -42,35 +47,38 @@ Array.prototype.myReduce = function(cb) {
 //   - recursively call quickSort on the left and right halves, and return the
 //   full sorted array.
 
-Array.prototype.quickSort = function() {
-  if (this.length === 0) {
-    // console.log(this);
-    return this;
-  }
-  if (this.length === 1) {
-    // console.log(this);
+Array.prototype.quickSort = function(comparator) {
+  if (this.length <= 1) {
     return this;
   }
 
-  let pivot = this[0];
-  let left = [];
-  let right = [];
+  if (typeof comparator !== "function") {
+    comparator = (x, y) => {
+      if (x === y) {
+        return 0;
+      } else if (x < y) {
+        return -1;
+      } else {
+        return 1;
+      }
+    };
+  }
+
+  const pivot = this[0];
+  const left = [];
+  const right = [];
 
   for(let i = 1; i < this.length; i++) {
-    if (this[i] < pivot) {
+    if (comparator(this[i], pivot) === -1) {
       left.push(this[i]);
     } else {
       right.push(this[i]);
     }
   }
 
-  let result_left = left.quickSort();
-  let result_right = right.quickSort();
-  console.log(result_left);
-  console.log(result_right);
-  // left_and_pivot = result_left.concat(pivot);
-
-  return (result_left).concat(pivot, result_right);
+  return left.quickSort(comparator)
+    .concat([pivot])
+    .concat(right.quickSort(comparator));
 };
 
 // console.log([3, 5, 2, 1, 4, 2, 7].quickSort());
@@ -80,7 +88,7 @@ console.log([3, 2, 5, 1, 7].quickSort());
 // callback returns true, or undefined if none is found.
 
 function myFind(array, callback) {
-  for(i = 0; i < array.length; i++) {
+  for(let i = 0; i < array.length; i++) {
     if (callback(array[i])) {
       return array[i];
     }
@@ -94,7 +102,9 @@ function myFind(array, callback) {
 // write sumNPrimes(n)
 
 function isPrime(num) {
-  for(i = 2; i < num; i++) {
+  if (num <= 1) { return false; }
+
+  for(let i = 2; i < num; i++) {
     if (num % i === 0) {
       return false;
     }
@@ -103,21 +113,36 @@ function isPrime(num) {
   return true;
 };
 
+// function sumNPrimes(n) {
+//   if (n === 0) {
+//     return 0;
+//   }
+//   let primes = [];
+//   let i = 2;
+//   for(i = 2; primes.length < n; i++) {
+//     if (isPrime(i)) {
+//       primes.push(i);
+//     }
+//   }
+//
+//   return primes.myReduce( (accumulator, el) => { return accumulator + el });
+// };
+
 function sumNPrimes(n) {
-  if (n === 0) {
-    return 0;
-  }
-  let primes = [];
-  let i = 2;
-  for(i = 2; primes.length < n; i++) {
+  let i = 1;
+  let count = 0;
+  let sum = 0;
+
+  while (count < n) {
     if (isPrime(i)) {
-      primes.push(i);
+      count += 1;
+      sum += i;
     }
-    // console.log(primes);
+    i += 1;
   }
 
-  return primes.myReduce( (accumulator, el) => { return accumulator + el });
-};
+  return sum;
+}
 
 // console.log("!!");
 // console.log(sumNPrimes(3));
@@ -126,11 +151,17 @@ function sumNPrimes(n) {
 // console.log(isPrime(6));
 
 // write Function.prototype.myBind.
-Function.prototype.myBind = function(context, ...bindtime) {
-  return ((...calltime) => {
-    return this.call(context, ...bindtime, ...calltime)
-  });
-};
+// Function.prototype.myBind = function(context, ...bindArgs) {
+//   return (...callArgs) => {
+//     return this.call(context, ...bindArgs, ...callArgs)
+//   };
+// };
+
+Function.prototype.myBind = function(context, ...bindArgs) {
+  return (...callArgs) => {
+    return this.apply(context, bindArgs.concat(callArgs));
+  }
+}
 //
 // class Cat {
 //   constructor (name) {
@@ -167,4 +198,11 @@ Function.prototype.inherits = function(parentClass) {
   // this.prototype.constructor = this;
   this.prototype = Object.create(parentClass.prototype)
   this.prototype.constructor = this;
+}
+
+Function.prototype.inherits2 = function(parent, child) {
+  function Surrogate() {};
+  Surrogate.prototype = parent.prototype;
+  child.prototype = new Surrogate();
+  child.prototype.constructor = child;
 }
