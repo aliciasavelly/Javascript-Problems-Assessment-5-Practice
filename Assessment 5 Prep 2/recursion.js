@@ -23,7 +23,14 @@ Array.prototype.nestedEquals = function (arr) {
 //sum of the integers.
 
 function sumRecur (array) {
+  if (array.length === 1) {
+    return array[0];
+  }
 
+  if (array.length === 0) {
+    return 0;
+  }
+  return array[0] + sumRecur(array.slice(1));
 }
 
 console.log('-------SUM RECUR-------');
@@ -35,7 +42,14 @@ console.log(sumRecur([]) === 0);
 //whether or not the array contains a specific value.
 
 function includes (array, target) {
+  if (array[0] === target) {
+    return true;
+  }
+  if (array[0] !== target && array.length <= 1) {
+    return false;
+  }
 
+  return includes(array.slice(1), target);
 }
 
 console.log('-------INCLUDES-------');
@@ -48,7 +62,16 @@ console.log(includes([], 0) === false);
 // to count the number of occurrences of a specific value.
 
 function numOccur (array, target) {
+  let amount = 0;
+  if (array[0] === target) {
+    amount = 1;
+  }
 
+  if (array[0] !== target && array.length <= 1) {
+    return 0;
+  }
+
+  return amount + numOccur(array.slice(1), target);
 }
 
 console.log('-------NUM OCCUR-------');
@@ -59,7 +82,14 @@ console.log(numOccur([1, 1, 2, 3, 4, 5, 5, 4, 5, 6, 7, 6, 5, 6], 13) === 0);
 // whether or not two adjacent elements of the array add to 12.
 
 function addToTwelve (array) {
+  if (array.length === 2 && array[0] + array[1] !== 12) {
+    return false;
+  }
+  if (array[0] + array[1] === 12) {
+    return true;
+  }
 
+  return addToTwelve(array.slice(1));
 }
 
 console.log('-------ADD TO TWELVE-------');
@@ -70,7 +100,7 @@ console.log(addToTwelve([1, 1, 2, 3, 4, 5, 5, 4, 5, 6, 7, 6, 5, 6]) === false);
 // if the array is sorted.
 
 function sorted (array) {
-
+  
 }
 
 console.log('-------SORTED-------');

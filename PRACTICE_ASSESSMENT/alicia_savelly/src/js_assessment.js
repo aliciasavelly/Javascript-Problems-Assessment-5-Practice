@@ -292,6 +292,29 @@ Array.prototype.mergeSort = function(cb) {
   // let right = this.slice(middle).mergeSort(cb);
   //
   // return merge(left, right, cb);
+
+  //
+  // if (this.length <= 1) {
+  //   return this;
+  // }
+  //
+  // if(typeof cb !== "function") {
+  //   cb = (x, y) => {
+  //     if (x < y) {
+  //       return -1;
+  //     } else if (x === y) {
+  //       return 0;
+  //     } else {
+  //       return 1;
+  //     }
+  //   }
+  // }
+  //
+  // let middle = Math.floor(this.length / 2);
+  // let left = this.slice(0, middle).mergeSort(cb);
+  // let right = this.slice(middle).mergeSort(cb);
+  //
+  // return merge(left, right, cb);
 }
 //
 // function merge(left, right, cb) {
@@ -312,8 +335,29 @@ Array.prototype.mergeSort = function(cb) {
 //   return merged;
 // }
 
+//
+// function merge(left, right, cb) {
+//   let merged = [];
+//
+//   while (left.length > 0 && right.length > 0) {
+//     if (cb(left[0], right[0]) === -1) {
+//       merged.push(left.shift());
+//     } else if (cb(left[0], right[0]) === 0) {
+//       merged.push(left.shift());
+//     } else if (cb(left[0], right[0] === 1)) {
+//       merged.push(right.shift());
+//     }
+//   }
+//
+//   merged = merged.concat(left);
+//   merged = merged.concat(right);
+//
+//   return merged;
+// }
+
 console.log("----------merge sort----------");
 console.log([3, 2, 1, 5, 6, 3, 2, 1, 8].mergeSort());
+
 //sorting algorithms
 
 //enumerable functions. not necessary to know all of them but
