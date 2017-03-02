@@ -530,3 +530,16 @@ Array.prototype.bubbleSort = function() {
 
 console.log("----------bubble sort----------");
 // console.log([1, 32, 2, 1, 5, 6, 3, 4, 9, 7].bubbleSort());
+
+function digital_root(num) {
+  while (Math.floor(num >= 10)) {
+    num = Math.floor(num/10) +Math.floor(num % 10);
+  }
+  return num;
+}
+
+console.log(digital_root(12));
+console.log(digital_root(20));
+console.log(digital_root(1));
+console.log(digital_root(234));
+console.log(digital_root(122));
