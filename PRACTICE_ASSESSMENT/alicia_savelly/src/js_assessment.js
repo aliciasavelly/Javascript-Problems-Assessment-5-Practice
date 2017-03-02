@@ -15,7 +15,7 @@ String.prototype.mySlice = function(startIdx, endIdx = this.length) {
   return result;
 };
 
-console.log("alicia".mySlice(1, 4)); // "lic"
+// console.log("alicia".mySlice(1, 4)); // "lic"
 
 // write Array.prototype.myReduce (analogous to Ruby's Array#inject).
 
@@ -48,6 +48,7 @@ Array.prototype.myReduce = function(cb) {
 //   full sorted array.
 
 Array.prototype.quickSort = function(comparator) {
+  /*
   if (this.length <= 1) {
     return this;
   }
@@ -79,9 +80,46 @@ Array.prototype.quickSort = function(comparator) {
   return left.quickSort(comparator)
     .concat([pivot])
     .concat(right.quickSort(comparator));
+  */
+
+  //
+  // if (this.length <= 1) {
+  //   return this;
+  // }
+  //
+  // if (typeof comparator !== "function") {
+  //   comparator = (x, y) => {
+  //     if (x > y) {
+  //       return 1;
+  //     } else if (x === y) {
+  //       return 0;
+  //     } else if (x < y) {
+  //       return -1;
+  //     }
+  //   }
+  // }
+  //
+  // let pivot = this[0];
+  // let left = [];
+  // let right = [];
+  //
+  // for (let i = 1; i < this.length; i++) {
+  //   if (comparator(this[i], pivot) === -1) {
+  //     left.push(this[i]);
+  //   } else if (comparator(this[i], pivot) === 0) {
+  //     left.push(this[i]);
+  //   } else if (comparator(this[i], pivot) === 1) {
+  //     right.push(this[i]);
+  //   }
+  // }
+  //
+  // return left.quickSort(comparator)
+  //             .concat(pivot)
+  //             .concat(right.quickSort(comparator));
 };
 
-// console.log([3, 5, 2, 1, 4, 2, 7].quickSort());
+console.log("----------quick sort----------");
+console.log([3, 5, 2, 1, 4, 2, 7].quickSort());
 console.log([3, 2, 5, 1, 7].quickSort());
 
 // write myFind(array, callback). It should return the first element for which
@@ -158,8 +196,12 @@ function sumNPrimes(n) {
 // };
 
 Function.prototype.myBind = function(context, ...bindArgs) {
+  //
+  // return (...callArgs) => {
+  //   return this.apply(context, bindArgs.concat(callArgs));
+  // }
   return (...callArgs) => {
-    return this.apply(context, bindArgs.concat(callArgs));
+    return this.call(context, ...bindArgs, ...callArgs);
   }
 }
 //
@@ -192,63 +234,85 @@ Function.prototype.myBind = function(context, ...bindArgs) {
 // write Function.prototype.inherits.
 
 Function.prototype.inherits = function(parentClass) {
+  //
   // function Surrogate() {};
   // Surrogate.prototype = parentClass.prototype;
   // this.prototype = new Surrogate();
   // this.prototype.constructor = this;
-  this.prototype = Object.create(parentClass.prototype)
-  this.prototype.constructor = this;
-}
 
-Function.prototype.inherits2 = function(parent, child) {
-  function Surrogate() {};
-  Surrogate.prototype = parent.prototype;
-  child.prototype = new Surrogate();
-  child.prototype.constructor = child;
+  //
+  // this.prototype = Object.create(parentClass.prototype)
+  // this.prototype.constructor = this;
+
+  //
+  // function Surrogate() {};
+  // Surrogate.prototype = parentClass.prototype;
+  // this.prototype = new Surrogate();
+  // this.prototype.constructor = this;
+
+  //
+  // function Surrogate() {};
+  // Surrogate.prototype = parentClass.prototype;
+  // this.prototype = new Surrogate();
+  // this.prototype.constructor = this;
+  //
+  // this.prototype = Object.create(parentClass.prototype);
+  // this.prototype.constructor = this;
+
+  //
+  // function Surrogate() {};
+  // Surrogate.prototype = parentClass.prototype;
+  // this.prototype = new Surrogate();
+  // this.prototype.constructor = this;
+  //
+  // this.prototype = Object.create(parentClass.prototype);
+  // this.prototype.constructor = this;
 }
 
 Array.prototype.mergeSort = function(cb) {
-  if (this.length <= 1) {
-    return this;
-  }
-
-  if (typeof cb !== Function) {
-    cb = function(x, y) {
-      if (x < y) {
-        return -1;
-      } else if(x === y) {
-        return 0;
-      } else if (x > y) {
-        return 1;
-      }
-    }
-  }
-
-  let middle = Math.floor(this.length / 2);
-  let left = this.slice(0, middle).mergeSort(cb);
-  let right = this.slice(middle).mergeSort(cb);
-
-  return merge(left, right, cb);
+  //
+  // if (this.length <= 1) {
+  //   return this;
+  // }
+  //
+  // if (typeof cb !== Function) {
+  //   cb = function(x, y) {
+  //     if (x < y) {
+  //       return -1;
+  //     } else if(x === y) {
+  //       return 0;
+  //     } else if (x > y) {
+  //       return 1;
+  //     }
+  //   }
+  // }
+  //
+  // let middle = Math.floor(this.length / 2);
+  // let left = this.slice(0, middle).mergeSort(cb);
+  // let right = this.slice(middle).mergeSort(cb);
+  //
+  // return merge(left, right, cb);
 }
+//
+// function merge(left, right, cb) {
+//   merged = [];
+//
+//   while (left.length >= 1 && right.length >= 1) {
+//     if (cb(left[0], right[0]) === -1) {
+//       merged.push(left.shift());
+//     } else if (cb(left[0], right[0]) === 0){
+//       merged.push(left.shift());
+//     } else if (cb(left[0], right[0]) === 1){
+//       merged.push(right.shift());
+//     }
+//   }
+//
+//   merged = merged.concat(left);
+//   merged = merged.concat(right);
+//   return merged;
+// }
 
-function merge(left, right, cb) {
-  merged = [];
-
-  while (left.length >= 1 && right.length >= 1) {
-    if (cb(left[0], right[0]) === -1) {
-      merged.push(left.shift());
-    } else if (cb(left[0], right[0]) === 0){
-      merged.push(left.shift());
-    } else if (cb(left[0], right[0]) === 1){
-      merged.push(right.shift());
-    }
-  }
-
-  merged = merged.concat(left);
-  merged = merged.concat(right);
-  return merged;
-}
-
+console.log("----------merge sort----------");
 console.log([3, 2, 1, 5, 6, 3, 2, 1, 8].mergeSort());
 //sorting algorithms
 
@@ -267,3 +331,158 @@ console.log([3, 2, 1, 5, 6, 3, 2, 1, 8].mergeSort());
 //substrings recursive fair game, some of the easier ones fair game
 //do recursive questions come from just javascript? no, it comes
 //from ruby curriculum too
+
+function bsearch(arr, target) {
+  /*
+  let middle = Math.floor(arr.length / 2);
+  let midP = arr[middle];
+
+  if (arr.length === 1 && arr[0] != target) {
+    return -1;
+  }
+
+  if (midP < target) {
+    let search = bsearch(arr.slice(middle + 1), target);
+    return (search === -1) ? -1 : search + middle + 1;
+
+  } else if (midP === target) {
+    return middle;
+
+  } else if (midP > target) {
+    let search2 = bsearch(arr.slice(0, middle), target);
+    return (search2 === -1) ? -1 : search2;
+  }
+  */
+
+  //
+  // let middle = Math.floor(arr.length / 2);
+  // let midP = arr[middle];
+  //
+  // if (arr.length <= 1 && arr[0] != target) {
+  //   return -1;
+  // }
+  //
+  // if (midP < target) {
+  //   let search = bsearch(arr.slice(middle + 1), target)
+  //   return (search === -1) ? -1 : search + middle + 1;
+  //
+  // } else if (midP === target) {
+  //   return middle;
+  //
+  // } else if (midP > target) {
+  //   let search = bsearch(arr.slice(0, middle), target);
+  //   return (search === -1) ? -1 : search;
+  // }
+
+  //
+  // let middle = Math.floor(arr.length / 2)
+  // let midP = arr[middle];
+  //
+  // if (arr.length <= 1 && arr[0] !== target) {
+  //   return -1
+  // }
+  //
+  // if (midP < target) {
+  //   let search = bsearch(arr.slice(middle + 1), target);
+  //   return (search === -1) ? -1 : search + middle + 1;
+  // } else if (midP === target) {
+  //   return middle;
+  // } else if (midP > target) {
+  //   let search = bsearch(arr.slice(0, middle), target);
+  //   return (search === -1) ? -1 : search;
+  // }
+}
+
+console.log("----------bsearch----------");
+// console.log(bsearch([1, 3, 5, 6, 7, 11, 14, 19, 20], 2)); //-1
+// console.log(bsearch([1, 3, 5, 6, 7, 11, 14, 19, 20], 21)); //-1
+// console.log(bsearch([1, 3, 5, 6, 7, 11, 14, 19, 20], 1)); //0
+// console.log(bsearch([1, 3, 5, 6, 7, 11, 14, 19, 20], 3)); //1
+// console.log(bsearch([1, 3, 5, 6, 7, 11, 14, 19, 20], 5)); //2
+// console.log(bsearch([1, 3, 5, 6, 7, 11, 14, 19, 20], 6)); //3
+// console.log(bsearch([1, 3, 5, 6, 7, 11, 14, 19, 20], 7)); //4
+// console.log(bsearch([1, 3, 5, 6, 7, 11, 14, 19, 20], 11)); //5
+// console.log(bsearch([1, 3, 5, 6, 7, 11, 14, 19, 20], 14)); //6
+// console.log(bsearch([1, 3, 5, 6, 7, 11, 14, 19, 20], 19)); //7
+// console.log(bsearch([1, 3, 5, 6, 7, 11, 14, 19, 20], 20)); //8
+// console.log(bsearch([1], 1)); //0
+// console.log(bsearch([1], 12)); //-1
+
+Function.prototype.myCurry = function (numArgs) {
+  //
+  // let that = this;
+  // let storage = [];
+  // let _curry = function(arg) {
+  //   storage.push(arg);
+  //   if (numArgs === storage.length) {
+  //     return that.call(null, ...storage);
+  //   } else {
+  //     return _curry;
+  //   }
+  // };
+  //
+  // return _curry;
+
+  //
+  // storage = [];
+  //
+  // _curry = (arg) => {
+  //   storage.push(arg);
+  //   if (storage.length === numArgs) {
+  //     return this.call(null, ...storage);
+  //   } else {
+  //     return _curry;
+  //   }
+  // }
+  //
+  // return _curry;
+
+  //
+  // let storage = [];
+  //
+  // _curry = (arg) => {
+  //   storage.push(arg);
+  //
+  //   if (storage.length === numArgs) {
+  //     return this(...storage);
+  //   } else {
+  //     return _curry;
+  //   }
+  // }
+  //
+  // return _curry;
+};
+
+let sums = function(...els){
+  let sum = 0;
+  els.forEach((el) => {
+    sum += el;
+  });
+  return sum;
+};
+
+console.log("----------my curry----------");
+// console.log(sums.myCurry(3)(5)(6)(7));
+
+Array.prototype.bubbleSort = function() {
+  //
+  // let sorted = false;
+  //
+  // while (sorted === false) {
+  //   sorted = true;
+  //   for(let i = 0; i < this.length; i++) {
+  //     let j = i + 1;
+  //     if (this[i] > this[j]) {
+  //       sorted = false;
+  //       let temp = this[i];
+  //       this[i] = this[j];
+  //       this[j] = temp;
+  //     }
+  //   }
+  // }
+  //
+  // return this;
+}
+
+console.log("----------bubble sort----------");
+// console.log([1, 32, 2, 1, 5, 6, 3, 4, 9, 7].bubbleSort());
