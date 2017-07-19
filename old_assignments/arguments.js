@@ -44,7 +44,6 @@ function curriedSum(numArgs) {
   const numbers = [];
 
   function _curriedSum(n) {
-    // console.log(n);
     numbers.push(n);
     if(numbers.length === numArgs) {
       return numbers.reduce((acc, el) => acc + el, 0);
